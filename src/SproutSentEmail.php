@@ -144,10 +144,7 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
      */
     protected function createSettingsModel(): SproutBaseSentEmailSettings
     {
-        /** @var SproutBaseSentEmailSettings $settingsModel */
-        $settingsModel = SproutBase::$app->settings->getBaseSettings(SproutBaseSentEmailSettings::class, $this->handle);
-
-        return $settingsModel;
+        return new SproutBaseSentEmailSettings();
     }
 
     /**
@@ -169,8 +166,8 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
     {
         return [
             // Sent Emails
-            'sprout-sent-email/sent-email' => [
-                'template' => 'sprout-base-sent-email/sent-email/index'
+            '<pluginHandle:sprout-sent-email>/sent-email' => [
+                'route' => 'sprout-base-sent-email/sent-email/sent-email-index-template'
             ],
 
             // Settings
