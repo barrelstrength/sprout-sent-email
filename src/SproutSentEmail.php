@@ -128,12 +128,14 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getSproutDependencies(): array
     {
         return [
             SproutDependencyInterface::SPROUT_BASE,
-            SproutDependencyInterface::SPROUT_BASE_SITEMAPS,
-            SproutDependencyInterface::SPROUT_BASE_URIS
+            SproutDependencyInterface::SPROUT_BASE_EMAIL
         ];
     }
 
