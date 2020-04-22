@@ -140,14 +140,6 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
     }
 
     /**
-     * @return SproutBaseSentEmailSettings
-     */
-    protected function createSettingsModel(): SproutBaseSentEmailSettings
-    {
-        return new SproutBaseSentEmailSettings();
-    }
-
-    /**
      * Redirect to Sprout Sitemaps settings
      *
      * @return \craft\web\Response|mixed|\yii\console\Response|Response
@@ -157,6 +149,14 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
         $url = UrlHelper::cpUrl('sprout-sent-email/settings');
 
         return Craft::$app->getResponse()->redirect($url);
+    }
+
+    /**
+     * @return SproutBaseSentEmailSettings
+     */
+    protected function createSettingsModel(): SproutBaseSentEmailSettings
+    {
+        return new SproutBaseSentEmailSettings();
     }
 
     /**
