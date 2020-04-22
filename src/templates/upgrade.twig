@@ -1,10 +1,10 @@
 {% extends "sprout-base/_layouts/baselanding" %}
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
-{% set title = "Upgrade to Sprout Redirects Pro"|t('sprout-redirects') %}
+{% set title = "Upgrade to Sprout Sent Email Pro"|t('sprout-sent-email') %}
 {% set bodyClass = 'sprout-landing-page' %}
-{% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutbaseredirects/web/assets/base/dist', true) -%}
-{% set pluginStoreLink = currentUser.admin ? cpUrl('plugin-store/sprout-redirects') : 'https://plugins.craftcms.com/sprout-redirects' %}
+{% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutbasesentemail/web/assets/sentemail/dist', true) -%}
+{% set pluginStoreLink = currentUser.admin ? cpUrl('plugin-store/sprout-sent-email') : 'https://plugins.craftcms.com/sprout-sent-email' %}
 
 {% block content %}
 
@@ -13,17 +13,17 @@
         {{ parent() }}
 
         {{ sprout.featureHeader({
-            heading: "You once were lost. Now you're found."|t('sprout-redirects'),
-            message: "Sprout Redirects [pro] enables content managers to manage redirects and brand URLs. Monitor 404s, configure advanced redirect rules, and ensure all your content is findable."|t('sprout-redirects'),
-            primaryButtonText: "Upgrade Now"|t('sprout-redirects'),
+            heading: "Let me send that again."|t('sprout-sent-email'),
+            message: "Sprout Sent Email [pro] takes a snapshot of all emails sent from your website. Sent email tracking enables you to review what that was sent, confirm sent statuses, and resend email to your users."|t('sprout-sent-email'),
+            primaryButtonText: "Upgrade Now"|t('sprout-sent-email'),
             primaryButtonLink: pluginStoreLink,
-            secondaryButtonText: "Learn More"|t('sprout-redirects'),
-            secondaryButtonLink: "https://sprout.barrelstrengthdesign.com/docs/redirects"
+            secondaryButtonText: "Learn More"|t('sprout-sent-email'),
+            secondaryButtonLink: "https://sprout.barrelstrengthdesign.com/docs/sent-email"
         }) }}
 
         {{ sprout.featureImage({
-            imageUrl: assetUrl ~ '/images/sprout-redirects-feature.png',
-            altText: 'Sprout Redirects Redirect Manager for Craft CMS'|t('sprout-redirects')
+            imageUrl: assetUrl ~ '/images/sprout-sent-email-feature.png',
+            altText: 'Sprout Sent Email for Craft CMS'|t('sprout-sent-email')
         }) }}
 
     </div>
