@@ -9,12 +9,9 @@ namespace barrelstrength\sproutsentemail;
 
 use barrelstrength\sproutbase\base\SproutDependencyInterface;
 use barrelstrength\sproutbase\base\SproutDependencyTrait;
-use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasesentemail\models\Settings as SproutBaseSentEmailSettings;
-use barrelstrength\sproutbasesentemail\SproutBaseSentEmail;
 use Craft;
 use craft\base\Plugin;
-use craft\db\Query;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
