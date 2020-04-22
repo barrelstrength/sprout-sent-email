@@ -180,6 +180,11 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
                 'route' => 'sprout-base-sent-email/sent-email/sent-email-index-template'
             ],
 
+            // Preview
+            '<pluginHandle:sprout-sent-email>/sent-email/preview/<emailId:\d+>' => [
+                'route' => 'sprout-base-sent-email/sent-email/preview'
+            ],
+
             // Settings
             'sprout-sent-email/settings/<settingsSectionHandle:.*>' => [
                 'route' => 'sprout/settings/edit-settings',
