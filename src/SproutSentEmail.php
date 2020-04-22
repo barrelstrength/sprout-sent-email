@@ -159,6 +159,16 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
         return new SproutBaseSentEmailSettings();
     }
 
+    protected function afterInstall()
+    {
+        // Redirect to welcome page
+        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
+            return;
+        }
+
+        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-sent-email/welcome'))->send();
+    }
+
     /**
      * @return array
      */
