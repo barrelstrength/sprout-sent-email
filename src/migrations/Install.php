@@ -10,10 +10,8 @@ namespace barrelstrength\sproutsentemail\migrations;
 use barrelstrength\sproutbase\base\SproutDependencyInterface;
 use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use barrelstrength\sproutbasesentemail\migrations\Install as SproutBaseSentEmailInstall;
-use barrelstrength\sproutemail\SproutEmail;
 use barrelstrength\sproutsentemail\SproutSentEmail;
 use craft\db\Migration;
-use craft\errors\SiteNotFoundException;
 use Throwable;
 
 class Install extends Migration
