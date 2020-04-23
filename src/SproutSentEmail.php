@@ -9,7 +9,9 @@ namespace barrelstrength\sproutsentemail;
 
 use barrelstrength\sproutbase\base\SproutDependencyInterface;
 use barrelstrength\sproutbase\base\SproutDependencyTrait;
+use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasesentemail\models\Settings as SproutBaseSentEmailSettings;
+use barrelstrength\sproutbasesentemail\SproutBaseSentEmailHelper;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterUrlRulesEvent;
@@ -67,6 +69,9 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
     public function init()
     {
         parent::init();
+
+        SproutBaseHelper::registerModule();
+        SproutBaseSentEmailHelper::registerModule();
 
         Craft::setAlias('@sproutsentemail', $this->getBasePath());
 
