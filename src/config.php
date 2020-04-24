@@ -26,9 +26,11 @@ return [
     // Enable Sent Email tracking
     'enableSentEmails' => false,
 
-    // The total number of Sent Emails that will be stored in the database per-site
+    // The total number of Sent Emails that will be stored
+    // in the database per-site
     'sentEmailsLimit' => 5000,
 
-    // The probability that the Sent Emails cleanup task will run each time a Sent Email is tracked
+    // The probability that the Sent Emails cleanup task will run
+    // each time a Sent Email is tracked
     'cleanupProbability' => 1000
 ];
