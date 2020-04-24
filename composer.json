@@ -25,7 +25,7 @@
   },
   "require": {
     "craftcms/cms": "^3.4.0",
-    "barrelstrength/sprout-base": "^5.1.0",
+    "barrelstrength/sprout-base": "^5.2.0",
     "barrelstrength/sprout-base-sent-email": "^1.0.0"
   },
   "autoload": {
