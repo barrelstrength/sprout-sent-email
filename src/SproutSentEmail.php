@@ -179,12 +179,12 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
     {
         return [
             // Sent Emails
-            '<pluginHandle:sprout-sent-email>/sent-email' => [
+            '<pluginHandle:sprout-sent-email>/<pluginSection:sent-email>' => [
                 'route' => 'sprout-base-sent-email/sent-email/sent-email-index-template'
             ],
 
             // Preview
-            '<pluginHandle:sprout-sent-email>/sent-email/preview/<emailId:\d+>' => [
+            '<pluginHandle:sprout-sent-email>/<pluginSection:sent-email>/preview/<emailId:\d+>' => [
                 'route' => 'sprout-base-sent-email/sent-email/preview'
             ],
 
