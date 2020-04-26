@@ -11,6 +11,7 @@ use barrelstrength\sproutbase\base\SproutDependencyInterface;
 use barrelstrength\sproutbase\base\SproutDependencyTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasesentemail\models\Settings as SproutBaseSentEmailSettings;
+use barrelstrength\sproutbasesentemail\SproutBaseSentEmail;
 use barrelstrength\sproutbasesentemail\SproutBaseSentEmailHelper;
 use Craft;
 use craft\base\Plugin;
@@ -88,7 +89,7 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
     {
         $parent = parent::getCpNavItem();
 
-        $settings = $this->getSettings();
+        $settings = SproutBaseSentEmail::$app->settings->getSentEmailSettings();
 
         // Allow user to override plugin name in sidebar
         if ($settings->pluginNameOverride) {
@@ -191,13 +192,15 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
             'sprout-sent-email/settings/<settingsSectionHandle:.*>' => [
                 'route' => 'sprout/settings/edit-settings',
                 'params' => [
-                    'sproutBaseSettingsType' => SproutBaseSentEmailSettings::class
+                    'sproutBaseSettingsType' => SproutBaseSentEmailSettings::class,
+                    'pluginHandle' => $this->handle
                 ]
             ],
             'sprout-sent-email/settings' => [
                 'route' => 'sprout/settings/edit-settings',
                 'params' => [
-                    'sproutBaseSettingsType' => SproutBaseSentEmailSettings::class
+                    'sproutBaseSettingsType' => SproutBaseSentEmailSettings::class,
+                    'pluginHandle' => $this->handle
                 ]
             ]
         ];
