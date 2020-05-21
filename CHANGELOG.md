@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 - 2020-05-21
+
+### Changed
+- Updated `sproutemail_sentemails.htmlBody` column type to MEDIUMTEXT
+- Updated `barrelstrength/sprout-base-sent-email` requirement v1.1.2
+
 ## 1.1.0 - 2020-04-28
 
 ### Changed
