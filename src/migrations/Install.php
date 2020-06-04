@@ -7,10 +7,12 @@
 
 namespace barrelstrength\sproutsentemail\migrations;
 
-use barrelstrength\sproutbase\base\SproutDependencyInterface;
+use barrelstrength\sproutbase\config\base\DependencyInterface;
 use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
-use barrelstrength\sproutbasesentemail\migrations\Install as SproutBaseSentEmailInstall;
+use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbase\app\sentemail\migrations\Install as SproutBaseSentEmailInstall;
 use barrelstrength\sproutsentemail\SproutSentEmail;
+use barrelstrength\sproutbase\app\metadata\SproutSeo;
 use craft\db\Migration;
 use Throwable;
 
@@ -21,15 +23,7 @@ class Install extends Migration
      */
     public function safeUp(): bool
     {
-        $migration = new SproutBaseInstall();
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-
-        $migration = new SproutBaseSentEmailInstall();
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
+        SproutBase::$app->config->runInstallMigrations(SproutSentEmail::getInstance());
 
         return true;
     }
@@ -40,27 +34,7 @@ class Install extends Migration
      */
     public function safeDown(): bool
     {
-        /** @var SproutSentEmail $plugin */
-        $plugin = SproutSentEmail::getInstance();
-
-        $sproutBaseSentEmailInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_SENT_EMAIL);
-        $sproutBaseInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE);
-
-        if (!$sproutBaseSentEmailInUse) {
-            $migration = new SproutBaseSentEmailInstall();
-
-            ob_start();
-            $migration->safeDown();
-            ob_end_clean();
-        }
-
-        if (!$sproutBaseInUse) {
-            $migration = new SproutBaseInstall();
-
-            ob_start();
-            $migration->safeDown();
-            ob_end_clean();
-        }
+        SproutBase::$app->config->runUninstallMigrations(SproutSentEmail::getInstance());
 
         return true;
     }

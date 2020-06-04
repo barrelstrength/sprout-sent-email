@@ -1,9 +1,9 @@
-{% extends "sprout-base/_layouts/baselanding" %}
+{% extends "sprout-base/_layouts/base-landing" %}
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
 {% set title = "Welcome to Sprout Sent Email"|t('sprout-sent-email') %}
 {% set bodyClass = 'sprout-landing-page' %}
-{% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutbasesentemail/web/assets/sentemail/dist', true) -%}
+{% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutbase/app/sentemail/web/assets/sentemail/dist', true) -%}
 {% set pluginStoreLink = currentUser.admin ? cpUrl('plugin-store/sprout-sent-email') : 'https://plugins.craftcms.com/sprout-sent-email' %}
 {% block content %}
 
