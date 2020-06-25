@@ -7,18 +7,14 @@
 
 namespace barrelstrength\sproutsentemail;
 
-use barrelstrength\sproutbase\config\base\SproutCentralInterface;
-use barrelstrength\sproutbase\config\configs\CampaignsConfig;
-use barrelstrength\sproutbase\config\configs\EmailConfig;
-use barrelstrength\sproutbase\config\configs\GeneralConfig;
-use barrelstrength\sproutbase\config\configs\ReportsConfig;
+use barrelstrength\sproutbase\config\base\SproutBasePlugin;
+use barrelstrength\sproutbase\config\configs\ControlPanelConfig;
 use barrelstrength\sproutbase\config\configs\SentEmailConfig;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use Craft;
-use craft\base\Plugin;
 use craft\helpers\UrlHelper;
 
-class SproutSentEmail extends Plugin implements SproutCentralInterface
+class SproutSentEmail extends SproutBasePlugin
 {
     const EDITION_LITE = 'lite';
     const EDITION_PRO = 'pro';
@@ -27,6 +23,11 @@ class SproutSentEmail extends Plugin implements SproutCentralInterface
      * @var string
      */
     public $schemaVersion = '1.1.1';
+
+    /**
+     * @var string
+     */
+    public $minVersionRequired = '1.1.1';
 
     /**
      * @inheritdoc
@@ -42,7 +43,6 @@ class SproutSentEmail extends Plugin implements SproutCentralInterface
     public static function getSproutConfigs(): array
     {
         return [
-            GeneralConfig::class,
             SentEmailConfig::class
         ];
     }
@@ -55,17 +55,16 @@ class SproutSentEmail extends Plugin implements SproutCentralInterface
         parent::init();
 
         SproutBaseHelper::registerModule();
-
-        Craft::setAlias('@sproutsentemail', $this->getBasePath());
     }
 
     protected function afterInstall()
     {
-        // Redirect to welcome page
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
             return;
         }
 
-        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-sent-email/welcome'))->send();
+        // Redirect to welcome page
+        $url = UrlHelper::cpUrl('sprout/welcome/sent-email');
+        Craft::$app->controller->redirect($url)->send();
     }
 }

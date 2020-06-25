@@ -7,25 +7,29 @@
 
 namespace barrelstrength\sproutsentemail\migrations;
 
-use barrelstrength\sproutbase\config\base\DependencyInterface;
-use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbase\app\sentemail\migrations\Install as SproutBaseSentEmailInstall;
 use barrelstrength\sproutsentemail\SproutSentEmail;
-use barrelstrength\sproutbase\app\metadata\SproutSeo;
 use craft\db\Migration;
+use ReflectionException;
 use Throwable;
+use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\base\NotSupportedException;
+use yii\web\ServerErrorHttpException;
 
 class Install extends Migration
 {
     /**
      * @return bool
+     * @throws ReflectionException
+     * @throws ErrorException
+     * @throws Exception
+     * @throws NotSupportedException
+     * @throws ServerErrorHttpException
      */
     public function safeUp(): bool
     {
         SproutBase::$app->config->runInstallMigrations(SproutSentEmail::getInstance());
-
-        return true;
     }
 
     /**
@@ -35,7 +39,5 @@ class Install extends Migration
     public function safeDown(): bool
     {
         SproutBase::$app->config->runUninstallMigrations(SproutSentEmail::getInstance());
-
-        return true;
     }
 }
