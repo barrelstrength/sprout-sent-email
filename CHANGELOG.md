@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.2 - 2021-02-11
+
+### Changed
+- Updated `sproutemail_sentemails.body` column type to MEDIUMTEXT
+- Updated `barrelstrength/sprout-base-sent-email` requirement v1.1.4
+
+### Fixed
+- Fixed Composer 2 compatibility issue 
+
 ## 1.1.1 - 2020-05-21
 
 ### Changed
