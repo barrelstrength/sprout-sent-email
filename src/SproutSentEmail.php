@@ -1,60 +1,33 @@
 <?php
-/**
- * @link      https://sprout.barrelstrengthdesign.com/
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- */
 
-namespace barrelstrength\sproutsentemail;
+namespace BarrelStrength\SproutSentEmail;
 
-use barrelstrength\sproutbase\base\SproutDependencyInterface;
-use barrelstrength\sproutbase\base\SproutDependencyTrait;
-use barrelstrength\sproutbase\SproutBaseHelper;
-use barrelstrength\sproutbasesentemail\models\Settings as SproutBaseSentEmailSettings;
-use barrelstrength\sproutbasesentemail\SproutBaseSentEmail;
-use barrelstrength\sproutbasesentemail\SproutBaseSentEmailHelper;
+use BarrelStrength\Sprout\core\db\InstallHelper;
+use BarrelStrength\Sprout\core\db\SproutPluginMigrationInterface;
+use BarrelStrength\Sprout\core\db\SproutPluginMigrator;
+use BarrelStrength\Sprout\core\editions\Edition;
+use BarrelStrength\Sprout\core\modules\Modules;
+use BarrelStrength\Sprout\mailer\MailerModule;
+use BarrelStrength\Sprout\sentemail\SentEmailModule;
 use Craft;
 use craft\base\Plugin;
-use craft\events\RegisterUrlRulesEvent;
-use craft\events\RegisterUserPermissionsEvent;
+use craft\db\MigrationManager;
+use craft\errors\MigrationException;
+use craft\events\RegisterComponentTypesEvent;
 use craft\helpers\UrlHelper;
-use craft\services\UserPermissions;
-use craft\web\UrlManager;
 use yii\base\Event;
-use yii\web\Response;
+use yii\base\InvalidConfigException;
+use function Psy\debug;
 
-/**
- * @property mixed                                                    $cpNavItem
- * @property array                                                    $cpUrlRules
- * @property array                                                    $userPermissions
- * @property array                                                    $sproutDependencies
- * @property \yii\console\Response|\craft\web\Response|Response|mixed $settingsResponse
- * @property array                                                    $siteUrlRules
- */
-class SproutSentEmail extends Plugin implements SproutDependencyInterface
+class SproutSentEmail extends Plugin implements SproutPluginMigrationInterface
 {
-    use SproutDependencyTrait;
+    public const EDITION_LITE = 'lite';
+    public const EDITION_PRO = 'pro';
 
-    const EDITION_LITE = 'lite';
-    const EDITION_PRO = 'pro';
-
-    /**
-     * @var bool
-     */
-    public $hasCpSection = true;
+    public string $minVersionRequired = '1.1.2';
 
     /**
-     * @var bool
-     */
-    public $hasCpSettings = true;
-
-    /**
-     * @var string
-     */
-    public $schemaVersion = '1.1.1';
-
-    /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public static function editions(): array
     {
@@ -64,151 +37,73 @@ class SproutSentEmail extends Plugin implements SproutDependencyInterface
         ];
     }
 
+    public static function getSchemaDependencies(): array
+    {
+        return [
+            SentEmailModule::class,
+        ];
+    }
+
     /**
-     * @inheritdoc
+     * @throws InvalidConfigException
      */
-    public function init()
+    public function getMigrator(): MigrationManager
+    {
+        return SproutPluginMigrator::make($this);
+    }
+
+    public string $schemaVersion = '0.0.1';
+
+    public function init(): void
     {
         parent::init();
 
-        SproutBaseHelper::registerModule();
-        SproutBaseSentEmailHelper::registerModule();
+        Event::on(
+            Modules::class,
+            Modules::EVENT_REGISTER_SPROUT_AVAILABLE_MODULES,
+            function(RegisterComponentTypesEvent $event) {
+                $event->types[] = SentEmailModule::class;
+            }
+        );
 
-        Craft::setAlias('@sproutsentemail', $this->getBasePath());
-
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
-            $event->rules = array_merge($event->rules, $this->getCpUrlRules());
-        });
-
-        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-            $event->permissions['Sprout Sent Email'] = $this->getUserPermissions();
-        });
+        $this->instantiateSproutModules();
+        $this->grantModuleEditions();
     }
 
-    public function getCpNavItem()
+    protected function instantiateSproutModules(): void
     {
-        $parent = parent::getCpNavItem();
+        SentEmailModule::isEnabled() && SentEmailModule::getInstance();
+    }
 
-        $settings = SproutBaseSentEmail::$app->settings->getSentEmailSettings();
-
-        // Allow user to override plugin name in sidebar
-        if ($settings->pluginNameOverride) {
-            $parent['label'] = $settings['pluginNameOverride'];
+    protected function grantModuleEditions(): void
+    {
+        if ($this->edition === self::EDITION_PRO) {
+            SentEmailModule::isEnabled() && SentEmailModule::getInstance()->grantEdition(Edition::PRO);
         }
-        if (Craft::$app->getUser()->checkPermission('sproutSentEmail-viewSentEmail') && $settings->enableSentEmails) {
-            $parent['subnav']['sentemails'] = [
-                'label' => Craft::t('sprout-sent-email', 'Sent Emails'),
-                'url' => 'sprout-sent-email/sent-email'
-            ];
-        }
-
-        if (Craft::$app->getUser()->getIsAdmin()) {
-            $parent['subnav']['settings'] = [
-                'label' => Craft::t('sprout-sent-email', 'Settings'),
-                'url' => 'sprout-sent-email/settings'
-            ];
-        }
-
-        return $parent;
     }
 
     /**
-     * @return array
+     * @throws MigrationException
      */
-    public function getUserPermissions(): array
+    protected function afterInstall(): void
     {
-        return [
-            // We need this permission on top of the accessplugin- permission
-            // so that we can support the matching permission in Sprout Email
-            'sproutSentEmail-viewSentEmail' => [
-                'label' => Craft::t('sprout-sent-email', 'View Sent Email'),
-                'nested' => [
-                    'sproutSentEmail-resendEmails' => [
-                        'label' => Craft::t('sprout-sent-email', 'Resend Sent Emails')
-                    ]
-                ]
-            ],
-        ];
-    }
+        InstallHelper::runInstallMigrations($this);
 
-    /**
-     * @return array
-     */
-    public function getSproutDependencies(): array
-    {
-        return [
-            SproutDependencyInterface::SPROUT_BASE,
-            SproutDependencyInterface::SPROUT_BASE_EMAIL
-        ];
-    }
-
-    /**
-     * Redirect to Sprout Sitemaps settings
-     *
-     * @return \craft\web\Response|mixed|\yii\console\Response|Response
-     */
-    public function getSettingsResponse()
-    {
-        $url = UrlHelper::cpUrl('sprout-sent-email/settings');
-
-        return Craft::$app->getResponse()->redirect($url);
-    }
-
-    /**
-     * @return SproutBaseSentEmailSettings
-     */
-    protected function createSettingsModel(): SproutBaseSentEmailSettings
-    {
-        return new SproutBaseSentEmailSettings();
-    }
-
-    protected function afterInstall()
-    {
-        // Redirect to welcome page
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
             return;
         }
 
-        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-sent-email/welcome'))->send();
+        // Redirect to welcome page
+        $url = UrlHelper::cpUrl('sprout/welcome/sent-email');
+        Craft::$app->getResponse()->redirect($url)->send();
     }
 
     /**
-     * @return array
+     * @throws MigrationException
+     * @throws InvalidConfigException
      */
-    private function getCpUrlRules(): array
+    protected function beforeUninstall(): void
     {
-        return [
-            // Sent Emails
-            '<pluginHandle:sprout-sent-email>/<pluginSection:sent-email>' => [
-                'route' => 'sprout-base-sent-email/sent-email/sent-email-index-template'
-            ],
-            '<pluginHandle:sprout-sent-email>' => [
-                'route' => 'sprout-base-sent-email/sent-email/sent-email-index-template',
-                'params' => [
-                    'pluginSection' => 'sent-email'
-                ]
-            ],
-
-            // Preview
-            '<pluginHandle:sprout-sent-email>/<pluginSection:sent-email>/preview/<emailId:\d+>' => [
-                'route' => 'sprout-base-sent-email/sent-email/preview'
-            ],
-
-            // Settings
-            'sprout-sent-email/settings/<settingsSectionHandle:.*>' => [
-                'route' => 'sprout/settings/edit-settings',
-                'params' => [
-                    'sproutBaseSettingsType' => SproutBaseSentEmailSettings::class,
-                    'pluginHandle' => $this->handle
-                ]
-            ],
-            'sprout-sent-email/settings' => [
-                'route' => 'sprout/settings/edit-settings',
-                'params' => [
-                    'sproutBaseSettingsType' => SproutBaseSentEmailSettings::class,
-                    'pluginHandle' => $this->handle
-                ]
-            ]
-        ];
+        InstallHelper::runUninstallMigrations($this);
     }
 }

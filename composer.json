@@ -1,44 +1,22 @@
 {
-  "name": "barrelstrength/sprout-sent-email",
-  "description": "Review Sent Emails, confirm sent statuses, and re-send email to your users",
-  "version": "1.1.2",
-  "type": "craft-plugin",
-  "keywords": [
-    "craft",
-    "cms",
-    "craftcms",
-    "sent email",
-    "sprout sent email"
-  ],
-  "license": "proprietary",
-  "authors": [
-    {
-      "name": "Barrel Strength",
-      "homepage": "https://www.barrelstrengthdesign.com/"
-    }
-  ],
-  "support": {
-    "email": "sprout@barrelstrengthdesign.com",
-    "issues": "https://github.com/barrelstrength/craft-sprout-sitemaps/issues?state=open",
-    "source": "https://github.com/barrelstrength/craft-sprout-sitemaps",
-    "docs": "https://sprout.barrelstrengthdesign.com/docs/sitemaps"
-  },
-  "require": {
-    "craftcms/cms": "^3.4.0",
-    "barrelstrength/sprout-base": "^6.0.0",
-    "barrelstrength/sprout-base-sent-email": "^1.1.4"
-  },
-  "autoload": {
-    "psr-4": {
-      "barrelstrength\\sproutsentemail\\": "src/"
-    }
-  },
-  "extra": {
-    "name": "Sprout Sent Email",
-    "handle": "sprout-sent-email",
-    "developer": "Barrel Strength",
-    "developerUrl": "https://barrelstrengthdesign.com",
-    "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/email",
-    "class": "barrelstrength\\sproutsentemail\\SproutSentEmail"
-  }
+	"name": "barrelstrength/sprout-sent-email",
+	"type": "craft-plugin",
+	"version": "0.0.1",
+	"require": {
+		"barrelstrength/sprout": "^0"
+	},
+	"autoload": {
+		"psr-4": {
+			"BarrelStrength\\SproutSentEmail\\": "src/"
+		}
+	},
+	"extra": {
+		"name": "Sprout Sent Email",
+		"handle": "sprout-sent-email",
+		"developer": "Barrel Strength Design",
+		"developerUrl": "https://barrelstrengthdesign.com",
+		"developerEmail": "support@barrelstrengthdesign.com",
+		"documentationUrl": "https://barrelstrengthdesign.com",
+		"class": "BarrelStrength\\SproutSentEmail\\SproutSentEmail"
+	}
 }
