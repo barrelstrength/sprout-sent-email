@@ -2,12 +2,11 @@
 
 namespace BarrelStrength\SproutSentEmail;
 
-use BarrelStrength\Sprout\core\db\InstallHelper;
+use BarrelStrength\Sprout\core\db\MigrationHelper;
 use BarrelStrength\Sprout\core\db\SproutPluginMigrationInterface;
 use BarrelStrength\Sprout\core\db\SproutPluginMigrator;
 use BarrelStrength\Sprout\core\editions\Edition;
 use BarrelStrength\Sprout\core\modules\Modules;
-use BarrelStrength\Sprout\mailer\MailerModule;
 use BarrelStrength\Sprout\sentemail\SentEmailModule;
 use Craft;
 use craft\base\Plugin;
@@ -17,7 +16,6 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\helpers\UrlHelper;
 use yii\base\Event;
 use yii\base\InvalidConfigException;
-use function Psy\debug;
 
 class SproutSentEmail extends Plugin implements SproutPluginMigrationInterface
 {
@@ -87,7 +85,7 @@ class SproutSentEmail extends Plugin implements SproutPluginMigrationInterface
      */
     protected function afterInstall(): void
     {
-        InstallHelper::runInstallMigrations($this);
+        MigrationHelper::runMigrations($this);
 
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
             return;
@@ -104,6 +102,6 @@ class SproutSentEmail extends Plugin implements SproutPluginMigrationInterface
      */
     protected function beforeUninstall(): void
     {
-        InstallHelper::runUninstallMigrations($this);
+        MigrationHelper::runUninstallMigrations($this);
     }
 }
