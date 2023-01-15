@@ -1,4 +1,12 @@
 # Changelog
 
-## 4.0.0 - UNRELEASED
+## 4.44.444 - UNRELEASED
+
+> **Note**
+> Sprout Sent Email is now powered by the Sprout Framework.
+
+### Updated
+
+- Requires `barrelstrength/sprout:v4.44.444`
+- See Sent Email Module [release notes]([PERMALINK])
 

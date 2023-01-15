@@ -7,6 +7,7 @@ use BarrelStrength\Sprout\core\db\SproutPluginMigrationInterface;
 use BarrelStrength\Sprout\core\db\SproutPluginMigrator;
 use BarrelStrength\Sprout\core\editions\Edition;
 use BarrelStrength\Sprout\core\modules\Modules;
+use BarrelStrength\Sprout\mailer\MailerModule;
 use BarrelStrength\Sprout\sentemail\SentEmailModule;
 use Craft;
 use craft\base\Plugin;
@@ -19,9 +20,6 @@ use yii\base\InvalidConfigException;
 
 class SproutSentEmail extends Plugin implements SproutPluginMigrationInterface
 {
-    public const EDITION_LITE = 'lite';
-    public const EDITION_PRO = 'pro';
-
     public string $minVersionRequired = '1.1.2';
 
     /**
@@ -30,14 +28,15 @@ class SproutSentEmail extends Plugin implements SproutPluginMigrationInterface
     public static function editions(): array
     {
         return [
-            self::EDITION_LITE,
-            self::EDITION_PRO,
+            Edition::LITE,
+            Edition::PRO,
         ];
     }
 
     public static function getSchemaDependencies(): array
     {
         return [
+            MailerModule::class,
             SentEmailModule::class,
         ];
     }
@@ -75,7 +74,7 @@ class SproutSentEmail extends Plugin implements SproutPluginMigrationInterface
 
     protected function grantModuleEditions(): void
     {
-        if ($this->edition === self::EDITION_PRO) {
+        if ($this->edition === Edition::PRO) {
             SentEmailModule::isEnabled() && SentEmailModule::getInstance()->grantEdition(Edition::PRO);
         }
     }
