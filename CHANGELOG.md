@@ -1,9 +1,10 @@
 # Changelog
 
-## 4.44.444 - UNRELEASED
+## 4.44.444 - RETIRED
 
-### Updated
+### Changed
 
-- Requires `barrelstrength/sprout:4.0.0`
-- See Sent Email Module [release notes]([PERMALINK])
+- In an effort to reduce the number of packages we publicly maintain, Sprout Sent Email will not be migrated to Craft 4. Core sent email functionality has been migrated to [Sprout Email](https://plugins.craftcms.com/sprout-email). 
+
+
 
