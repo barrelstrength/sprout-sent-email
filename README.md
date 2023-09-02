@@ -1,7 +1,7 @@
 
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-Core sent email functionality has been migrated to [Sprout Email](https://plugins.craftcms.com/sprout-email).
+As of Craft 4, core sent email functionality has been migrated to [Sprout Email](https://plugins.craftcms.com/sprout-email).
 
 ----
 
